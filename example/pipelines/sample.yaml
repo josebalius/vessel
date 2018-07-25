@@ -11,7 +11,7 @@ sample:
   Map Again:
     lambda: pythonlambda
 
-  Reduce:
+  Reduce Again:
     task: pythontask
     count: 3
     parallel: true 
