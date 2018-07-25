@@ -9,12 +9,13 @@ import (
 )
 
 // pipelines
-// mobile.yaml
-// business.yaml
+// sample.yaml
 
 // functions
-// mobile/mapper
-// mobile/stopFinder
+// sample/golambda
+// sample/gotask
+// sample/pythonlambda
+// sample/pythontask
 
 // config.yaml
 

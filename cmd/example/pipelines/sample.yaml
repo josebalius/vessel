@@ -1,0 +1,14 @@
+sample: 
+  golambda:
+    start: true
+
+  gotask:
+    count: 5
+    parallel: true
+
+  pythonlambda:
+
+  pythontask:
+    count: 3
+    parallel: true
+    end: true
