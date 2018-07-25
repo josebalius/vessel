@@ -1,14 +1,18 @@
 sample: 
-  golambda:
+  Map:
     start: true
+    lambda: golambda
 
-  gotask:
+  Reduce:
+    task: gotask
     count: 5
     parallel: true
 
-  pythonlambda:
+  Map Again:
+    lambda: pythonlambda
 
-  pythontask:
+  Reduce:
+    task: pythontask
     count: 3
-    parallel: true
+    parallel: true 
     end: true
