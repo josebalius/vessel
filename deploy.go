@@ -1,6 +1,7 @@
 package vessel
 
 import (
+	"log"
 	"os"
 	"strings"
 
@@ -38,6 +39,23 @@ func Deploy() (err error) {
 		return errors.Wrap(err, "get caller identity")
 	}
 
+	// init registry
+	if err := initRegistry(awsSession, awsConfig, identity, config); err != nil {
+		return errors.Wrap(err, "init regisry")
+	}
+
+	// init pipelines
+	pipelines, err := NewPipelines(wd)
+	if err != nil {
+		return errors.Wrap(err, "load pipelines")
+	}
+
+	log.Printf("%+v", pipelines)
+
+	return
+}
+
+func initRegistry(awsSession *session.Session, awsConfig *aws.Config, identity *sts.GetCallerIdentityOutput, config *Config) error {
 	ecrSvc := ecr.New(awsSession, awsConfig)
 	vesselRepoName := aws.String("vessel")
 
@@ -69,5 +87,5 @@ func Deploy() (err error) {
 		config.ECR.RegistryID = *identity.Account
 	}
 
-	return
+	return nil
 }
