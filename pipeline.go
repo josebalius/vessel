@@ -12,7 +12,7 @@ import (
 //
 type Pipeline struct {
 	Name  string
-	Graph map[string]*Node
+	Graph map[string]*Function
 }
 
 //
@@ -28,10 +28,10 @@ func NewPipeline(projectPath, filePath string) (*Pipeline, error) {
 	}
 
 	pipeline.Name = strings.TrimSuffix(filepath.Base(filePath), ".yaml")
-	for nodeName, node := range pipeline.Graph {
-		nodePath := filepath.Join(projectPath, "functions", nodeName)
-		if err := node.Init(nodeName, nodePath); err != nil {
-			return nil, errors.Wrap(err, "init node")
+	for functionName, function := range pipeline.Graph {
+		functionPath := filepath.Join(projectPath, "functions", functionName)
+		if err := function.Init(functionName, functionPath); err != nil {
+			return nil, errors.Wrap(err, "init function")
 		}
 	}
 

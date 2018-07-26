@@ -8,7 +8,7 @@ import (
 )
 
 //
-type Node struct {
+type Function struct {
 	Name     string
 	Next     string `yaml:"next"`
 	Start    bool   `yaml:"start"`
@@ -28,11 +28,11 @@ const (
 )
 
 //
-func (n *Node) Init(name, nodePath string) error {
-	n.Name = name
-	n.Type = Lambda
+func (f *Function) Init(name, functionPath string) error {
+	f.Name = name
+	f.Type = Lambda
 
-	files, err := ioutil.ReadDir(nodePath)
+	files, err := ioutil.ReadDir(functionPath)
 	if err != nil {
 		return errors.Wrap(err, "read stage dir")
 	}
@@ -45,7 +45,7 @@ func (n *Node) Init(name, nodePath string) error {
 	}
 
 	if isTask {
-		n.Type = Task
+		f.Type = Task
 	}
 
 	return nil
