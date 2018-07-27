@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ecr"
+	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"github.com/pkg/errors"
 )
@@ -50,7 +51,29 @@ func Deploy() (err error) {
 		return errors.Wrap(err, "load pipelines")
 	}
 
-	log.Printf("%+v", pipelines)
+	// ensure functions exist
+	lambdaSvc := lambda.New(awsSession, awsConfig)
+
+	listFunctionsOutput, err := lambdaSvc.ListFunctions(&lambda.ListFunctionsInput{})
+	if err != nil {
+		return errors.Wrap(err, "list existing functions")
+	}
+
+	existingFunctions := make(map[string]bool)
+	for _, functionConfiguration := range listFunctionsOutput.Functions {
+		existingFunctions[*functionConfiguration.FunctionName] = true
+	}
+
+	missingFunctions := NewFunctions()
+	for _, pipeline := range pipelines {
+		for _, function := range pipeline.Graph {
+			if _, exists := existingFunctions[function.Name]; !exists {
+				missingFunctions = append(missingFunctions, function)
+			}
+		}
+	}
+
+	log.Println("Missing Functions", missingFunctions)
 
 	return
 }

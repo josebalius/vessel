@@ -29,7 +29,7 @@ const (
 
 //
 func (f *Function) Init(name, functionPath string) error {
-	f.Name = name
+	f.Name = "vessel-" + name
 	f.Type = Lambda
 
 	files, err := ioutil.ReadDir(functionPath)
@@ -49,4 +49,11 @@ func (f *Function) Init(name, functionPath string) error {
 	}
 
 	return nil
+}
+
+//
+type Functions []*Function
+
+func NewFunctions() Functions {
+	return Functions{}
 }
