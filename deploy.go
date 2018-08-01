@@ -3,6 +3,7 @@ package vessel
 import (
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -73,6 +74,12 @@ func Deploy() (err error) {
 		}
 	}
 
+	for _, mf := range missingFunctions {
+		if err := mf.Install(lambdaSvc); err != nil {
+			return errors.Wrap(err, "install missing functions")
+		}
+	}
+
 	log.Println("Missing Functions", missingFunctions)
 
 	return
@@ -111,4 +118,11 @@ func initRegistry(awsSession *session.Session, awsConfig *aws.Config, identity *
 	}
 
 	return nil
+}
+
+func runCommand(cmd *exec.Cmd) (err error) {
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	return cmd.Run()
 }
